@@ -16,29 +16,21 @@ const SERVERS = [
 
 export default function App(props){
   const [misServers, setMisServers] = useState(SERVERS);
-  const [error, setError] = useState(null);
 
   async function callServer(serverllamado) {
     try {
       const response = await fetch(serverllamado.url);
-      const data = await response.json();         
-      console.log(data);
-      if(response.status !== 200) {
-        setError({ description: `Obtenido error al llamar al server ${serverllamado.nombre}. Código ${response.status}` });
-      } else {
-        setError(null);
-        let nuevosServers = misServers.map((miserver, index) => {
-          if(miserver.nombre === serverllamado.nombre) {
-            //si es el server al que he llamado, guardo los datos recibidos en su objeto
-            miserver.contenido = data;
-          } 
-          return miserver;
-        });
-        setMisServers(nuevosServers);
-      }
+      const data = await response.json();    
+      let nuevosServers = misServers.map((miserver, index) => {
+        if(miserver.nombre === serverllamado.nombre) {
+          //si es el server al que he llamado, guardo los datos recibidos en su objeto
+          miserver.contenido = data;
+        } 
+        return miserver;
+      });
+      setMisServers(nuevosServers);      
     } catch (error) {
-      console.log(error);
-      setError({ description: error });
+      console.log(error);      
     }
   }
 
